@@ -1,0 +1,20 @@
+.boardContainer {
+  display: flex;
+  margin: 200px;
+  background: lightgray;
+  height: 500px;
+  width: 500px;
+  flex-wrap: wrap;
+}
+
+.square {
+  display: flex;
+  box-sizing: border-box;
+  border: solid 1px black;
+  flex-basis: 33.33%;
+  justify-content: center;
+  align-items: center;
+  /* border: black solid 1px; */
+  /* flex-wrap: wrap; */
+  font-size: 100px;
+}
