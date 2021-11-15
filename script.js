@@ -1,33 +1,44 @@
 let Gameboard = {
-  board: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+  board: ['x', 'o', 'x', 'x', 'o', 'o', 'x', 'x', 'o'],
   drawBoard: function drawBoard() {
     for (let i = 0; i < Gameboard.board.length; i++) {
-      let element = document.createElement('div');
+      let element = document.createElement('button');
       element.classList.add('square');
       element.setAttribute('data-key', i);
+      element.addEventListener('click', Gameboard.playerPicks);
       document
         .querySelector('.boardContainer')
         .appendChild(element).textContent = this.board[i];
     }
   },
 
+  playerPicks: function (e) {
+    console.log(Gameboard.board[e.target.dataset.key]);
+  },
+};
+
+let Players = {
   player1: 'player1',
   player2: 'player2',
 
-  setPlayer1Name: function (name) {
-    this.player1 = name;
+  player1Factory: (name) => {
+    Players.player1 = name;
   },
 
-  setPlayer2Name: function (name) {
-    this.player2 = name;
+  player2Factory: (name) => {
+    Players.player2 = name;
   },
 
   listPlayers: function () {
-    return this.player1 + this.player2;
+    return this.player1 + ' ' + this.player2;
   },
-  code: 'code',
 };
+
 Gameboard.drawBoard();
+
+// const playerFactory = (name) => {
+//   return { name };
+// };
 
 // do this!
 // function createMenuItem(name) {
