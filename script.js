@@ -1,5 +1,6 @@
 let Gameboard = {
-  board: ['x', 'o', 'x', 'x', 'o', 'o', 'x', 'x', 'o'],
+  board: [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  playerTurn: 1,
   drawBoard: function drawBoard() {
     for (let i = 0; i < Gameboard.board.length; i++) {
       let element = document.createElement('button');
@@ -13,7 +14,23 @@ let Gameboard = {
   },
 
   playerPicks: function (e) {
+    console.log(Gameboard.playerTurn + ' cia player turn');
     console.log(Gameboard.board[e.target.dataset.key]);
+    if (
+      Gameboard.board[e.target.dataset.key] == ' ' &&
+      Gameboard.playerTurn == 1
+    ) {
+      Gameboard.board[e.target.dataset.key] = 'x';
+      e.target.textContent = 'x';
+      Gameboard.playerTurn++;
+    } else if (
+      Gameboard.board[e.target.dataset.key] == ' ' &&
+      Gameboard.playerTurn == 2
+    ) {
+      Gameboard.board[e.target.dataset.key] = 'o';
+      e.target.textContent = 'o';
+      Gameboard.playerTurn--;
+    }
   },
 };
 
@@ -36,20 +53,22 @@ let Players = {
 
 Gameboard.drawBoard();
 
-// const playerFactory = (name) => {
-//   return { name };
-// };
-
-// do this!
-// function createMenuItem(name) {
-//   let li = document.createElement('li');
-//   li.textContent = name;
-//   return li;
-// }
-
-// // get the ul#userprofile
-// const userprofile = document.querySelector('#userprofile');
-// // add the user profile items
-// userprofile.appendChild(createMenuItem('Profile'));
-// userprofile.appendChild(createMenuItem('Settings'));
-// userprofile.appendChild(createMenuItem('Log out'));
+function checkWin() {
+  let winCond = 0;
+  let i = 0;
+  let lastElementIndex = 3;
+  for (i; i < lastElementIndex; i++) {
+    if (Gameboard.board[i] == 'x') {
+      winCond++;
+    } else if (Gameboard.board[i] == 'o') {
+      winCond--;
+    }
+    if (winCond == 3 || winCond == -3) {
+      return 'Player has won';
+    }
+    if (i == 2 || i == 5) {
+      lastElementIndex += 3;
+      winCond = 0;
+    }
+  }
+}
