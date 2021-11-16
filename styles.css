@@ -1,6 +1,24 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  font-size: large;
+}
+.playersContainer {
+  display: flex;
+}
+
+.player {
+  padding: 20px;
+  font-size: xx-large;
+}
+
 .boardContainer {
   display: flex;
-  margin: 200px;
+  margin: 20px;
   background: lightgray;
   height: 500px;
   width: 500px;
@@ -17,4 +35,5 @@
   /* border: black solid 1px; */
   /* flex-wrap: wrap; */
   font-size: 100px;
+  height: 33.33%;
 }
