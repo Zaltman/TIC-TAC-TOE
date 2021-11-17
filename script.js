@@ -1,17 +1,6 @@
 let Gameboard = {
   board: [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
   playerTurn: 1,
-  drawBoard: function drawBoard() {
-    for (let i = 0; i < Gameboard.board.length; i++) {
-      let element = document.createElement('button');
-      element.classList.add('square');
-      element.setAttribute('data-key', i);
-      element.addEventListener('click', Gameboard.playerPicks, Game.checkWin);
-      document
-        .querySelector('.boardContainer')
-        .appendChild(element).textContent = this.board[i];
-    }
-  },
 
   playerPicks: function (e) {
     if (Game.state == 1) {
@@ -33,22 +22,43 @@ let Gameboard = {
       if (Game.checkWin() !== undefined);
     }
   },
+
+  clearBoard: function () {
+    for (let i = 0; i < Gameboard.board.length; i++) {
+      Gameboard.board[i] = ' ';
+    }
+    let listToClear = document.querySelectorAll('.square');
+
+    for (let i = 0; i < listToClear.length; i++) {
+      listToClear[i].textContent = Gameboard.board[i];
+    }
+    Game.state = 1;
+    if (document.querySelector('.winner') !== null) {
+      document.querySelector('.winner').remove();
+    }
+  },
 };
 
 let Players = {
   player1: 'player1',
   player2: 'player2',
-
-  player1Factory: (name) => {
-    Players.player1 = name;
-  },
-
-  player2Factory: (name) => {
-    Players.player2 = name;
-  },
-
-  listPlayers: function () {
-    return this.player1 + ' ' + this.player2;
+  setPlayers: function () {
+    (function () {
+      let name = prompt('enter player1 name');
+      if (name == undefined || name == '') return;
+      Players.player1 = name;
+      let player1DomElement = document.querySelector('.player1');
+      player1DomElement.textContent = Players.player1 + '(x)';
+      player1DomElement = Players.player1;
+    })();
+    (function () {
+      let name = prompt('enter player2 name');
+      if (name == undefined || name == '') return;
+      Players.player2 = name;
+      let player2DomElement = document.querySelector('.player2');
+      player2DomElement.textContent = Players.player2 + '(o)';
+      player2DomElement = Players.player2;
+    })();
   },
 };
 
@@ -65,9 +75,13 @@ let Game = {
       } else if (Gameboard.board[i] == 'o') {
         winCond--;
       }
-      if (winCond == 3 || winCond == -3) {
+      if (winCond == 3) {
         Game.state = 0;
-        return 'Player has won';
+        return Game.alertWinner(Players.player1);
+      }
+      if (winCond == -3) {
+        Game.state = 0;
+        return Game.alertWinner(Players.player2);
       }
       if (i == 2 || i == 5) {
         lastElementIndex += 3;
@@ -85,9 +99,13 @@ let Game = {
       } else if (Gameboard.board[i] == 'o') {
         winCond--;
       }
-      if (winCond == 3 || winCond == -3) {
+      if (winCond == 3) {
         Game.state = 0;
-        return 'Player has won';
+        return Game.alertWinner(Players.player1);
+      }
+      if (winCond == -3) {
+        Game.state = 0;
+        return Game.alertWinner(Players.player2);
       }
       if (i == 6) {
         lastElementIndex += 1;
@@ -108,7 +126,7 @@ let Game = {
       Gameboard.board[0] == 'x'
     ) {
       Game.state = 0;
-      return Players.player1 + ' has won';
+      return Game.alertWinner(Players.player1);
     }
     if (
       Gameboard.board[0] == Gameboard.board[4] &&
@@ -116,7 +134,7 @@ let Game = {
       Gameboard.board[0] == 'o'
     ) {
       Game.state = 0;
-      return Players.player2 + ' has won';
+      return Game.alertWinner(Players.player2);
     }
 
     if (
@@ -125,7 +143,7 @@ let Game = {
       Gameboard.board[2] == 'x'
     ) {
       Game.state = 0;
-      return Players.player1 + ' has won';
+      return Game.alertWinner(Players.player1);
     }
     if (
       Gameboard.board[2] == Gameboard.board[4] &&
@@ -133,8 +151,37 @@ let Game = {
       Gameboard.board[2] == 'o'
     ) {
       Game.state = 0;
-      return Players.player2 + ' has won';
+      return Game.alertWinner(Players.player2);
+    }
+    let emptySquares = 9;
+    for (let i = 0; i < Gameboard.board.length; i++) {
+      if (Gameboard.board[i] !== ' ') emptySquares--;
+    }
+    if (emptySquares < 1) return Game.alertWinner('Nobody');
+  },
+  alertWinner: function alertWinner(winner) {
+    let winnerElement = document.createElement('div');
+    winnerElement.classList.add('winner');
+    winnerElement.textContent = winner + ' has won!';
+    parentDiv = document.querySelector('.gameControls');
+    refDiv = parentDiv.querySelector('button');
+    if (document.querySelector('.winner') == null) {
+      parentDiv.insertBefore(winnerElement, refDiv);
     }
   },
 };
-Gameboard.drawBoard();
+
+(function drawBoard() {
+  for (let i = 0; i < Gameboard.board.length; i++) {
+    let element = document.createElement('button');
+    element.classList.add('square');
+    element.setAttribute('data-key', i);
+    element.addEventListener('click', Gameboard.playerPicks, Game.checkWin);
+    document.querySelector('.boardContainer').appendChild(element).textContent =
+      Gameboard.board[i];
+  }
+  let changePlayerNameDom = document.querySelector('.changeName');
+  changePlayerNameDom.addEventListener('click', Players.setPlayers);
+  let startNewDom = document.querySelector('#startNew');
+  startNewDom.addEventListener('click', Gameboard.clearBoard);
+})();
