@@ -1,3 +1,6 @@
+* {
+  background-color: #aebee8;
+}
 body {
   display: flex;
   flex-direction: column;
@@ -8,6 +11,12 @@ body {
 button {
   font-size: large;
   padding: 10px;
+}
+
+.changeName,
+#startNew {
+  background-color: #f2f6ff;
+  border-radius: 5px;
 }
 .playersContainer {
   display: flex;
@@ -23,8 +32,13 @@ button {
   font-size: xx-large;
 }
 
-.player1 {
-  background-color: red;
+.player1,
+.player2 {
+  font-size: 40px;
+  background-color: #f2f6ff;
+  border-radius: 10px;
+  padding: 10px;
+  height: 50px;
 }
 
 .boardContainer {
@@ -34,9 +48,12 @@ button {
   height: 500px;
   width: 500px;
   flex-wrap: wrap;
+  /* border: solid px red; */
 }
 
 .square {
+  background: #c5cfe9;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   display: flex;
   box-sizing: border-box;
   border: solid 1px black;
